@@ -59,7 +59,7 @@ let consumers = []      // [ { socketId1, roomName1, consumer, }, ... ]
 const createWorker = async () => {
   worker = await mediasoup.createWorker({
     rtcMinPort: 2000,
-    rtcMaxPort: 2020,
+    rtcMaxPort: 2100,
   })
   console.log(`worker pid ${worker.pid}`)
 
@@ -80,12 +80,6 @@ worker = createWorker()
 // list of media codecs supported by mediasoup ...
 // https://github.com/versatica/mediasoup/blob/v3/src/supportedRtpCapabilities.ts
 const mediaCodecs = [
-  {
-    kind: 'audio',
-    mimeType: 'audio/opus',
-    clockRate: 48000,
-    channels: 2,
-  },
   {
     kind: 'video',
     mimeType: 'video/VP8',
@@ -208,7 +202,7 @@ connections.on('connection', async socket => {
     // get Router (Room) object this peer is in based on RoomName
     const router = rooms[roomName].router
 
-
+    console.log("createWebRtcTransport(router).then(, ", socket.id)
     createWebRtcTransport(router).then(
       transport => {
         callback({
@@ -429,7 +423,7 @@ const createWebRtcTransport = async (router) => {
         listenIps: [
           {
             ip: '0.0.0.0', // replace with relevant IP address
-            announcedIp: '10.0.0.115',
+            announcedIp: '127.0.0.1',
           }
         ],
         enableUdp: true,
